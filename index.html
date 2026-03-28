@@ -2,791 +2,212 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>UangId - Personal Finance Manager</title>
+<title>$ UangId AI PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-  color: #f1f5f9;
-  min-height: 100vh;
-}
-
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px 16px 32px;
-}
-
-/* Header Styles */
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid rgba(34, 197, 94, 0.3);
-}
-
-.logo {
-  font-size: 36px;
-  font-weight: bold;
-  background: linear-gradient(135deg, #22c55e, #10b981);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
-}
-
-.header h2 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  background: linear-gradient(135deg, #fff, #86efac);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Card Styles */
-.card {
-  background: rgba(30, 41, 59, 0.85);
-  backdrop-filter: blur(10px);
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 24px;
-  border: 1px solid rgba(34, 197, 94, 0.2);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  border-color: rgba(34, 197, 94, 0.4);
-}
-
-/* Input Styles */
-input, .input-field {
-  width: 100%;
-  padding: 12px 16px;
-  margin: 8px 0;
-  border-radius: 16px;
-  border: 1px solid #334155;
-  background: #0f172a;
-  color: #fff;
-  font-size: 14px;
-  transition: all 0.2s;
-}
-
-input:focus {
-  outline: none;
-  border-color: #22c55e;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
-}
-
-input::placeholder {
-  color: #64748b;
-}
-
-/* Button Styles */
-button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 40px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 8px;
-  font-family: inherit;
-}
-
-button:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.05);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: white;
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-}
-
-.btn-secondary {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-}
-
-.btn-warning {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: white;
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
-}
-
-.btn-outline {
-  background: transparent;
-  border: 2px solid #22c55e;
-  color: #22c55e;
-}
-
-.btn-google {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border: 1px solid #fff;
-}
-
-/* Profile Section */
-.profile {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-  padding: 12px;
-  background: rgba(34, 197, 94, 0.1);
-  border-radius: 60px;
-  border: 1px solid rgba(34, 197, 94, 0.3);
-}
-
-.profile img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 2px solid #22c55e;
-  object-fit: cover;
-}
-
-#namaUser {
-  font-weight: 600;
-  font-size: 16px;
-  flex: 1;
-  word-break: break-all;
-}
-
-/* Stats Grid */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.stat-item {
-  background: #0f172a;
-  padding: 12px;
-  border-radius: 16px;
-  text-align: center;
-  border-left: 3px solid #22c55e;
-}
-
-.stat-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #94a3b8;
-  margin-bottom: 6px;
-}
-
-.stat-value {
-  font-size: 18px;
-  font-weight: bold;
-  word-break: break-word;
-}
-
-.stat-positive {
-  color: #86efac;
-}
-
-.stat-negative {
-  color: #f87171;
-}
-
-/* Chart Containers */
-.chart-container {
-  margin-top: 15px;
-  background: #0f172a;
-  border-radius: 16px;
-  padding: 12px;
-}
-
-.chart-title {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #86efac;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-canvas {
-  max-height: 220px;
-  width: 100%;
-  background: #0f172a;
-  border-radius: 12px;
-}
-
-/* Button Group */
-.button-group {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.button-group button {
-  flex: 1;
-}
-
-/* Alert */
-.alert {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 12px 20px;
-  background: #22c55e;
-  color: white;
-  border-radius: 12px;
-  animation: slideIn 0.3s ease;
-  z-index: 1000;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .container {
-    padding: 12px;
-  }
-  
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .button-group {
-    flex-direction: column;
-  }
-  
-  .profile {
-    flex-wrap: wrap;
-  }
-}
+body{margin:0;font-family:sans-serif;background:#0f172a;color:#fff}
+.container{max-width:1000px;margin:auto;padding:20px}
+.card{background:#1e293b;padding:15px;border-radius:14px;margin-top:15px}
+input,select{width:100%;padding:10px;border:none;border-radius:8px;margin:5px 0}
+button{padding:10px;border:none;border-radius:8px;background:#22c55e;color:#fff;cursor:pointer}
+h1{color:#22c55e}
 </style>
 </head>
 
 <body>
-<div class="container">
 
-<div class="header">
-<div class="logo"></div>
-<h2>UangId</h2>
-</div>
-
-<!-- LOGIN SECTION -->
-<div id="authBox" class="card">
-<input id="email" placeholder="Email" type="email">
+<div class="container" id="auth">
+<h1>$ UangId</h1>
+<input id="email" placeholder="Email">
 <input id="password" type="password" placeholder="Password">
-<button onclick="login()" class="btn-primary"> Login</button>
-<button onclick="register()" class="btn-secondary"> Daftar</button>
-<button onclick="loginGoogle()" class="btn-google"> Login dengan Gmail</button>
-<button onclick="lupaPassword()" class="btn-warning"> Lupa Password</button>
+<button onclick="login()">Login</button>
+<button onclick="register()">Daftar</button>
+<button onclick="loginGoogle()">Login Gmail</button>
+<button onclick="resetPassword()">Lupa Password</button>
 </div>
 
-<!-- MAIN APP SECTION -->
-<div id="app" style="display:none">
+<div class="container" id="app" style="display:none">
 
-<div class="profile">
-<img id="fotoUser" src="https://i.pravatar.cc/100">
-<div id="namaUser">User</div>
-<button onclick="logout()" class="btn-danger" style="width: auto; padding: 8px 16px; margin: 0;">Logout</button>
-</div>
+<h1>$ UangId Dashboard</h1>
+<img id="photo" width="60" style="border-radius:50%">
 
-<!-- Target Keuangan -->
 <div class="card">
-<h3 style="margin-bottom: 12px;"> Rencana Keuangan</h3>
-<input id="pemasukan" type="number" placeholder="Target Pemasukan (Rp)">
-<input id="pengeluaranTetap" type="number" placeholder="Pengeluaran Tetap (Rp)">
-<input id="danaDarurat" type="number" placeholder="Dana Darurat (Rp)">
-<input id="investasi" type="number" placeholder="Investasi (Rp)">
-<button onclick="simpanTarget()" class="btn-primary"> Simpan Rencana</button>
-</div>
-
-<!-- Tambah Transaksi -->
-<div class="card">
-<h3 style="margin-bottom: 12px;"> Catat Transaksi</h3>
-<input id="tanggal" type="date">
-<input id="nominal" type="number" placeholder="Nominal (Rp)">
-<input id="keterangan" placeholder="Kategori (Makanan, Transport, dll)">
-<button onclick="tambahTransaksi()" class="btn-primary"> Tambah Transaksi</button>
-</div>
-
-<!-- Ringkasan Keuangan -->
-<div class="card">
-<h3 style="margin-bottom: 12px;"> Ringkasan Keuangan</h3>
-<div class="stats-grid">
-<div class="stat-item">
-<div class="stat-label"> Target Pemasukan</div>
-<div class="stat-value stat-positive" id="viewPemasukan">0</div>
-</div>
-<div class="stat-item">
-<div class="stat-label"> Total Pengeluaran</div>
-<div class="stat-value stat-negative" id="viewPengeluaran">0</div>
-</div>
-<div class="stat-item">
-<div class="stat-label"> Sisa / Surplus</div>
-<div class="stat-value" id="viewSisa">0</div>
-</div>
-<div class="stat-item">
-<div class="stat-label"> Dana Darurat</div>
-<div class="stat-value" id="viewDana">0</div>
-</div>
-<div class="stat-item">
-<div class="stat-label"> Investasi</div>
-<div class="stat-value" id="viewInvest">0</div>
-</div>
-</div>
-</div>
-
-<!-- Export Button -->
-<div class="button-group">
-<button onclick="exportExcel()" class="btn-secondary"> Export ke Excel</button>
-</div>
-
-<!-- Charts -->
-<div class="card">
-<div class="chart-title"> Perbandingan Arus Kas</div>
-<div class="chart-container">
-<canvas id="chartProfit"></canvas>
-</div>
+<input id="income" placeholder="Pemasukan">
+<input id="expense" placeholder="Pengeluaran">
+<input id="emergency" placeholder="Dana Darurat">
+<input id="invest" placeholder="Investasi">
+<button onclick="saveFinancial()">Simpan</button>
 </div>
 
 <div class="card">
-<div class="chart-title"> Tren Transaksi Harian</div>
-<div class="chart-container">
-<canvas id="chartHarian"></canvas>
-</div>
-</div>
-
-<div class="card">
-<div class="chart-title"> Ringkasan Bulanan</div>
-<div class="chart-container">
-<canvas id="chartBulanan"></canvas>
-</div>
+<h3>Tambah Transaksi</h3>
+<input id="t_amount" placeholder="Jumlah">
+<input id="t_desc" placeholder="Keterangan">
+<select id="t_type">
+<option value="expense">Pengeluaran</option>
+<option value="income">Pemasukan</option>
+</select>
+<button onclick="addTransaction()">Tambah</button>
 </div>
 
 <div class="card">
-<div class="chart-title"> Kategori Pengeluaran</div>
-<div class="chart-container">
-<canvas id="chartKategori"></canvas>
-</div>
+<h3>Target Tabungan</h3>
+<input id="target" placeholder="Target">
+<button onclick="setTarget()">Set</button>
+<div id="progress"></div>
 </div>
 
+<div class="card">
+<canvas id="chart"></canvas>
 </div>
+
+<div class="card" id="ai"></div>
+
+<div class="card">
+<ul id="history"></ul>
+</div>
+
+<button onclick="exportExcel()">Export Excel</button>
+<button onclick="logout()">Logout</button>
+
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-import { 
-getAuth, 
-signInWithEmailAndPassword, 
-createUserWithEmailAndPassword, 
-GoogleAuthProvider, 
-signInWithPopup, 
-signOut,
-sendPasswordResetEmail,
-updateProfile
-} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 
-import { 
-getFirestore, 
-collection, 
-addDoc, 
-doc, 
-setDoc, 
-onSnapshot, 
-query, 
-where,
-deleteDoc
-} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* Firebase Config */
+/* 🔥 CONFIG SUDAH DIISI */
 const firebaseConfig = {
-apiKey: "AIzaSyCLbSEl6FIvAIOtlAtWFhEtampGubOnBLw",
-authDomain: "uangid-ab245.firebaseapp.com",
-projectId: "uangid-ab245"
+  apiKey: "AIzaSyCLbSEl6FIvAIOtlAtWFhEtampGubOnBLw",
+  authDomain: "uangid-ab245.firebaseapp.com",
+  projectId: "uangid-ab245"
 };
 
-const appFirebase = initializeApp(firebaseConfig);
-const auth = getAuth(appFirebase);
-const db = getFirestore(appFirebase);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
 
-let userId = null;
-let dataTarget = {};
-let semuaTransaksi = [];
-let chartInstances = {};
+let userData={},transactions=[],chart,targetValue=0;
 
-/* Helper Functions */
-function formatRupiah(angka) {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(angka);
+onAuthStateChanged(auth, async user=>{
+if(user){
+authBox.style.display="none";
+app.style.display="block";
+photo.src=user.photoURL||"https://i.pravatar.cc/100";
+await load(user.uid);
 }
-
-function showAlert(message, isError = false) {
-  const alertDiv = document.createElement('div');
-  alertDiv.className = 'alert';
-  alertDiv.style.backgroundColor = isError ? '#ef4444' : '#22c55e';
-  alertDiv.textContent = message;
-  document.body.appendChild(alertDiv);
-  setTimeout(() => alertDiv.remove(), 3000);
-}
-
-/* Auth Functions */
-window.login = () => {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  if (!email || !password) {
-    showAlert('Email dan password harus diisi!', true);
-    return;
-  }
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => showAlert('Login berhasil!'))
-    .catch(err => showAlert('Login gagal: ' + err.message, true));
-};
-
-window.register = () => {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  if (!email || !password) {
-    showAlert('Email dan password harus diisi!', true);
-    return;
-  }
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      showAlert('Pendaftaran berhasil! Selamat datang.');
-      updateProfile(userCredential.user, {
-        displayName: email.split('@')[0]
-      });
-    })
-    .catch(err => showAlert('Pendaftaran gagal: ' + err.message, true));
-};
-
-window.loginGoogle = () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
-    .then(() => showAlert('Login dengan Google berhasil!'))
-    .catch(err => showAlert('Google login gagal: ' + err.message, true));
-};
-
-window.logout = () => {
-  signOut(auth).then(() => showAlert('Anda telah logout'));
-};
-
-window.lupaPassword = () => {
-  const email = document.getElementById('email').value;
-  if (!email) {
-    showAlert('Masukkan email terlebih dahulu!', true);
-    return;
-  }
-  sendPasswordResetEmail(auth, email)
-    .then(() => showAlert('Email reset password telah dikirim! Cek inbox Anda.'))
-    .catch(err => showAlert('Gagal: ' + err.message, true));
-};
-
-/* Data Functions */
-window.simpanTarget = async () => {
-  if (!userId) return;
-  const targetData = {
-    pemasukan: Number(document.getElementById('pemasukan').value) || 0,
-    pengeluaranTetap: Number(document.getElementById('pengeluaranTetap').value) || 0,
-    danaDarurat: Number(document.getElementById('danaDarurat').value) || 0,
-    investasi: Number(document.getElementById('investasi').value) || 0
-  };
-  await setDoc(doc(db, "target", userId), targetData);
-  showAlert('Rencana keuangan tersimpan!');
-};
-
-window.tambahTransaksi = async () => {
-  if (!userId) return;
-  const tanggal = document.getElementById('tanggal').value;
-  const nominal = Number(document.getElementById('nominal').value);
-  const keterangan = document.getElementById('keterangan').value.trim();
-  
-  if (!tanggal) {
-    showAlert('Pilih tanggal transaksi!', true);
-    return;
-  }
-  if (!nominal || nominal === 0) {
-    showAlert('Masukkan nominal yang valid!', true);
-    return;
-  }
-  if (!keterangan) {
-    showAlert('Masukkan keterangan/kategori!', true);
-    return;
-  }
-  
-  await addDoc(collection(db, "transaksi"), {
-    userId,
-    tanggal,
-    nominal,
-    keterangan
-  });
-  
-  document.getElementById('nominal').value = '';
-  document.getElementById('keterangan').value = '';
-  showAlert('Transaksi berhasil ditambahkan!');
-};
-
-/* Calculate and Update UI */
-function hitungDanUpdate() {
-  const pemasukanTarget = dataTarget.pemasukan || 0;
-  const tetap = dataTarget.pengeluaranTetap || 0;
-  const danaDaruratVal = dataTarget.danaDarurat || 0;
-  const investasiVal = dataTarget.investasi || 0;
-  
-  // Hitung total pengeluaran harian (nominal positif)
-  const totalPengeluaranHarian = semuaTransaksi.reduce((sum, t) => sum + (t.nominal > 0 ? t.nominal : 0), 0);
-  const totalPengeluaranFinal = tetap + danaDaruratVal + investasiVal + totalPengeluaranHarian;
-  const sisa = pemasukanTarget - totalPengeluaranFinal;
-  
-  // Update display dengan format Rupiah
-  document.getElementById('viewPemasukan').innerHTML = formatRupiah(pemasukanTarget);
-  document.getElementById('viewPengeluaran').innerHTML = formatRupiah(totalPengeluaranFinal);
-  const sisaElement = document.getElementById('viewSisa');
-  sisaElement.innerHTML = formatRupiah(sisa);
-  sisaElement.className = `stat-value ${sisa >= 0 ? 'stat-positive' : 'stat-negative'}`;
-  document.getElementById('viewDana').innerHTML = formatRupiah(danaDaruratVal);
-  document.getElementById('viewInvest').innerHTML = formatRupiah(investasiVal);
-  
-  // Update Profit Chart
-  if (chartInstances.profit) chartInstances.profit.destroy();
-  const ctxProfit = document.getElementById('chartProfit').getContext('2d');
-  chartInstances.profit = new Chart(ctxProfit, {
-    type: 'bar',
-    data: {
-      labels: ['Pemasukan', 'Pengeluaran', 'Surplus'],
-      datasets: [{
-        data: [pemasukanTarget, totalPengeluaranFinal, sisa],
-        backgroundColor: ['#10b981', '#f97316', '#facc15'],
-        borderRadius: 8
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: { labels: { color: '#cbd5e1' } }
-      }
-    }
-  });
-}
-
-/* Charts Update */
-function updateAllCharts() {
-  if (!semuaTransaksi.length) {
-    // Clear charts if no data
-    ['chartHarian', 'chartBulanan', 'chartKategori'].forEach(chartId => {
-      if (chartInstances[chartId]) chartInstances[chartId].destroy();
-    });
-    return;
-  }
-  
-  const harianMap = new Map();
-  const bulananMap = new Map();
-  const kategoriMap = new Map();
-  
-  semuaTransaksi.forEach(t => {
-    if (!t.tanggal) return;
-    const nominalVal = t.nominal;
-    const dateStr = t.tanggal;
-    const dateObj = new Date(t.tanggal);
-    const monthKey = `${dateObj.getFullYear()}-${dateObj.getMonth() + 1}`;
-    const monthLabel = `${dateObj.getFullYear()}/${dateObj.getMonth() + 1}`;
-    
-    harianMap.set(dateStr, (harianMap.get(dateStr) || 0) + nominalVal);
-    bulananMap.set(monthLabel, (bulananMap.get(monthLabel) || 0) + nominalVal);
-    
-    const kategori = t.keterangan && t.keterangan.trim() ? t.keterangan : 'Lainnya';
-    kategoriMap.set(kategori, (kategoriMap.get(kategori) || 0) + (nominalVal > 0 ? nominalVal : 0));
-  });
-  
-  // Harian Chart
-  if (chartInstances.harian) chartInstances.harian.destroy();
-  const ctxHarian = document.getElementById('chartHarian').getContext('2d');
-  chartInstances.harian = new Chart(ctxHarian, {
-    type: 'line',
-    data: {
-      labels: Array.from(harianMap.keys()),
-      datasets: [{
-        label: 'Transaksi (Rp)',
-        data: Array.from(harianMap.values()),
-        borderColor: '#22c55e',
-        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-        fill: true,
-        tension: 0.3
-      }]
-    },
-    options: { responsive: true, maintainAspectRatio: true }
-  });
-  
-  // Bulanan Chart
-  if (chartInstances.bulanan) chartInstances.bulanan.destroy();
-  const ctxBulan = document.getElementById('chartBulanan').getContext('2d');
-  chartInstances.bulanan = new Chart(ctxBulan, {
-    type: 'bar',
-    data: {
-      labels: Array.from(bulananMap.keys()),
-      datasets: [{
-        label: 'Total per Bulan (Rp)',
-        data: Array.from(bulananMap.values()),
-        backgroundColor: '#3b82f6',
-        borderRadius: 8
-      }]
-    },
-    options: { responsive: true }
-  });
-  
-  // Kategori Chart
-  if (chartInstances.kategori) chartInstances.kategori.destroy();
-  const ctxKat = document.getElementById('chartKategori').getContext('2d');
-  const colors = ['#10b981', '#f97316', '#facc15', '#8b5cf6', '#ec489a', '#06b6d4'];
-  chartInstances.kategori = new Chart(ctxKat, {
-    type: 'doughnut',
-    data: {
-      labels: Array.from(kategoriMap.keys()),
-      datasets: [{
-        data: Array.from(kategoriMap.values()),
-        backgroundColor: colors,
-        borderWidth: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'bottom', labels: { color: '#cbd5e6', font: { size: 11 } } }
-      }
-    }
-  });
-}
-
-/* Realtime Listeners */
-function listenRealtime() {
-  if (!userId) return;
-  
-  // Target listener
-  onSnapshot(doc(db, "target", userId), (docSnap) => {
-    if (docSnap.exists()) {
-      dataTarget = docSnap.data();
-    } else {
-      dataTarget = {};
-    }
-    // Prefill input fields
-    document.getElementById('pemasukan').value = dataTarget.pemasukan || '';
-    document.getElementById('pengeluaranTetap').value = dataTarget.pengeluaranTetap || '';
-    document.getElementById('danaDarurat').value = dataTarget.danaDarurat || '';
-    document.getElementById('investasi').value = dataTarget.investasi || '';
-    hitungDanUpdate();
-  });
-  
-  // Transaksi listener
-  const q = query(collection(db, "transaksi"), where("userId", "==", userId));
-  onSnapshot(q, (snapshot) => {
-    semuaTransaksi = [];
-    snapshot.forEach(docSnap => {
-      semuaTransaksi.push({
-        id: docSnap.id,
-        ...docSnap.data()
-      });
-    });
-    semuaTransaksi.sort((a, b) => (a.tanggal || '').localeCompare(b.tanggal || ''));
-    updateAllCharts();
-    hitungDanUpdate();
-  });
-}
-
-/* Export to Excel */
-window.exportExcel = () => {
-  if (!semuaTransaksi.length) {
-    showAlert('Tidak ada data transaksi untuk diekspor!', true);
-    return;
-  }
-  
-  const exportData = semuaTransaksi.map(t => ({
-    'Tanggal': t.tanggal,
-    'Nominal (Rp)': t.nominal,
-    'Keterangan': t.keterangan
-  }));
-  
-  const ws = XLSX.utils.json_to_sheet(exportData);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Data Keuangan");
-  XLSX.writeFile(wb, `UangId_${new Date().toISOString().slice(0,10)}.xlsx`);
-  showAlert('Export Excel berhasil!');
-};
-
-/* Auth State Handler */
-auth.onAuthStateChanged((user) => {
-  const authBox = document.getElementById('authBox');
-  const appDiv = document.getElementById('app');
-  
-  if (user) {
-    userId = user.uid;
-    authBox.style.display = "none";
-    appDiv.style.display = "block";
-    
-    // Set user info
-    document.getElementById('namaUser').innerHTML = user.displayName || user.email;
-    if (user.photoURL) {
-      document.getElementById('fotoUser').src = user.photoURL;
-    }
-    
-    // Set default date
-    if (!document.getElementById('tanggal').value) {
-      document.getElementById('tanggal').value = new Date().toISOString().slice(0, 10);
-    }
-    
-    listenRealtime();
-  } else {
-    userId = null;
-    authBox.style.display = "block";
-    appDiv.style.display = "none";
-    semuaTransaksi = [];
-    dataTarget = {};
-  }
 });
 
-// Set default date on load
-if (document.getElementById('tanggal')) {
-  document.getElementById('tanggal').value = new Date().toISOString().slice(0, 10);
+window.login=()=>signInWithEmailAndPassword(auth,email.value,password.value);
+window.register=()=>createUserWithEmailAndPassword(auth,email.value,password.value);
+window.loginGoogle=()=>signInWithPopup(auth,new GoogleAuthProvider());
+window.resetPassword=()=>sendPasswordResetEmail(auth,email.value);
+window.logout=()=>signOut(auth).then(()=>location.reload());
+
+async function load(uid){
+const snap=await getDoc(doc(db,"users",uid));
+if(snap.exists())userData=snap.data();
+
+const ts=await getDocs(collection(db,"users",uid,"transactions"));
+transactions=[];
+ts.forEach(d=>transactions.push(d.data()));
+
+renderAll();
 }
+
+window.saveFinancial=async()=>{
+const uid=auth.currentUser.uid;
+userData={
+income:+income.value,
+expense:+expense.value,
+emergency:+emergency.value,
+invest:+invest.value
+};
+await setDoc(doc(db,"users",uid),userData);
+renderAll();
+};
+
+window.addTransaction=async()=>{
+const uid=auth.currentUser.uid;
+const data={
+amount:+t_amount.value,
+desc:t_desc.value,
+type:t_type.value,
+time:new Date().toISOString()
+};
+await addDoc(collection(db,"users",uid,"transactions"),data);
+transactions.push(data);
+renderAll();
+};
+
+function renderAll(){
+renderChart();
+renderHistory();
+analyzeAI();
+updateProgress();
+}
+
+function renderChart(){
+if(chart)chart.destroy();
+chart=new Chart(chart,{
+type:"bar",
+data:{
+labels:["Income","Expense","Emergency","Invest"],
+datasets:[{data:[
+userData.income||0,
+userData.expense||0,
+userData.emergency||0,
+userData.invest||0
+]}]
+}
+});
+}
+
+function renderHistory(){
+history.innerHTML="";
+transactions.forEach(t=>{
+let li=document.createElement("li");
+li.innerText=`${t.type} - Rp ${t.amount} (${t.desc})`;
+history.appendChild(li);
+});
+}
+
+function analyzeAI(){
+let income=userData.income||0,expense=userData.expense||0;
+let status="Aman";
+if(expense>income)status="Boros";
+else if(expense>income*0.7)status="Waspada";
+
+ai.innerHTML=`🤖 Status: ${status}<br>Sisa: Rp ${income-expense}`;
+}
+
+window.setTarget=()=>{
+targetValue=+target.value;
+updateProgress();
+};
+
+function updateProgress(){
+let total=(userData.income||0)-(userData.expense||0);
+let p=targetValue?(total/targetValue)*100:0;
+progress.innerHTML=`${p.toFixed(1)}%`;
+}
+
+window.exportExcel=()=>{
+let ws1=XLSX.utils.json_to_sheet([userData]);
+let ws2=XLSX.utils.json_to_sheet(transactions);
+let wb=XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(wb,ws1,"Keuangan");
+XLSX.utils.book_append_sheet(wb,ws2,"Transaksi");
+XLSX.writeFile(wb,"UangId.xlsx");
+};
+
 </script>
+
 </body>
 </html>
